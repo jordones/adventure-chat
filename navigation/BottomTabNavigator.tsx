@@ -5,9 +5,10 @@ import * as React from 'react';
 
 import Colors from '../constants/Colors';
 import useColorScheme from '../hooks/useColorScheme';
-import TabOneScreen from '../screens/TabOneScreen';
-import TabTwoScreen from '../screens/TabTwoScreen';
-import { BottomTabParamList, TabOneParamList, TabTwoParamList } from '../types';
+import MessagesScreen from '../screens/MessagesScreen';
+import TabOneScreen from '../screens/MessagesScreen';
+import ProfileScreen from '../screens/ProfileScreen';
+import { BottomTabParamList, MessagesTabParamList, ProfileTabParamList } from '../types';
 
 const BottomTab = createBottomTabNavigator<BottomTabParamList>();
 
@@ -16,20 +17,22 @@ export default function BottomTabNavigator() {
 
   return (
     <BottomTab.Navigator
-      initialRouteName="TabOne"
+      initialRouteName="MessagesTab"
       tabBarOptions={{ activeTintColor: Colors[colorScheme].tint }}>
       <BottomTab.Screen
-        name="TabOne"
-        component={TabOneNavigator}
+        name="MessagesTab"
+        component={MessagesNavigator}
         options={{
-          tabBarIcon: ({ color }) => <TabBarIcon name="ios-code" color={color} />,
+          tabBarIcon: ({ color }) => <TabBarIcon name="ios-chatbubbles-outline" color={color} />,
+          tabBarLabel: () => null,
         }}
       />
       <BottomTab.Screen
-        name="TabTwo"
-        component={TabTwoNavigator}
+        name="ProfileTab"
+        component={ProfileNavigator}
         options={{
-          tabBarIcon: ({ color }) => <TabBarIcon name="ios-code" color={color} />,
+          tabBarIcon: ({ color }) => <TabBarIcon name="ios-person-circle-outline" color={color} />,
+          tabBarLabel: () => null,
         }}
       />
     </BottomTab.Navigator>
@@ -39,35 +42,41 @@ export default function BottomTabNavigator() {
 // You can explore the built-in icon families and icons on the web at:
 // https://icons.expo.fyi/
 function TabBarIcon(props: { name: string; color: string }) {
-  return <Ionicons size={30} style={{ marginBottom: -3 }} {...props} />;
+  return <Ionicons size={25} {...props} />;
+}
+
+function HeaderIcon(props: { name: string; color: string }) {
+  return <Ionicons size={25} style={{marginRight: 10}} {...props} />;
 }
 
 // Each tab has its own navigation stack, you can read more about this pattern here:
 // https://reactnavigation.org/docs/tab-based-navigation#a-stack-navigator-for-each-tab
-const TabOneStack = createStackNavigator<TabOneParamList>();
+const MessagesStack = createStackNavigator<MessagesTabParamList>();
 
-function TabOneNavigator() {
+function MessagesNavigator() {
+  const colorScheme = useColorScheme();
+
   return (
-    <TabOneStack.Navigator>
-      <TabOneStack.Screen
-        name="TabOneScreen"
-        component={TabOneScreen}
-        options={{ headerTitle: 'Tab One Title' }}
+    <MessagesStack.Navigator>
+      <MessagesStack.Screen
+        name="MessagesScreen"
+        component={MessagesScreen}
+        options={{ headerTitle: 'Adventure Chat', headerRight: ({tintColor}) => <HeaderIcon name="ios-create-outline" color={Colors[colorScheme].tint} />  }}
       />
-    </TabOneStack.Navigator>
+    </MessagesStack.Navigator>
   );
 }
 
-const TabTwoStack = createStackNavigator<TabTwoParamList>();
+const ProfileStack = createStackNavigator<ProfileTabParamList>();
 
-function TabTwoNavigator() {
+function ProfileNavigator() {
   return (
-    <TabTwoStack.Navigator>
-      <TabTwoStack.Screen
-        name="TabTwoScreen"
-        component={TabTwoScreen}
-        options={{ headerTitle: 'Tab Two Title' }}
+    <ProfileStack.Navigator>
+      <ProfileStack.Screen
+        name="ProfileScreen"
+        component={ProfileScreen}
+        options={{ headerTitle: 'Profile' }}
       />
-    </TabTwoStack.Navigator>
+    </ProfileStack.Navigator>
   );
 }
